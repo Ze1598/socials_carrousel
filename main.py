@@ -142,18 +142,3 @@ if st.button("Generate Image"):
         )
 else:
      st.info("Enter your quotes and click 'Generate Image'.")
-
-# Add instructions
-st.sidebar.header("Instructions")
-st.sidebar.info(
-    f"""
-    1.  Ensure the template image file (`{TEMPLATE_IMAGE_PATH}`) is in the same folder as this script.
-    2.  Enter the text for the top and bottom quotes in the text areas.
-    3.  Click the 'Generate Image' button.
-    4.  The generated image will appear below.
-    5.  Click the 'Download Image' button to save it.
-    """
-)
-st.sidebar.warning(
-    "Note: Text wrapping and positioning depend on the chosen font and size. You may need to adjust `FONT_SIZE_TOP`, `FONT_SIZE_BOTTOM`, `PADDING`, and the Y-coordinates (`top_text_y`, `bottom_text_y`) in the script for optimal results with different fonts or text lengths."
-)
