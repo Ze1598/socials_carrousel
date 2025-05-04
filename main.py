@@ -56,6 +56,7 @@ def draw_text_with_wrap(draw, text, position, font, max_width, fill):
         current_y += line_height * 1.35 # Add line spacing (adjust 1.2 factor as needed)
     return current_y # Return the y position after the last line
 
+
 # --- Streamlit App ---
 st.set_page_config(layout="centered")
 st.title("Quote Image Generator")
@@ -117,7 +118,7 @@ if st.button("Generate Image"):
         if top_quote:
              last_y_top = draw_text_with_wrap(draw, top_quote, (PADDING, top_text_y), font_top, MAX_WIDTH_PX, TEXT_COLOR)
              # Adjust bottom text start position based on where top text ended
-            #  bottom_text_y = last_y_top + 50 # Add some spacing between quotes
+             bottom_text_y = last_y_top + 50 # Add some spacing between quotes
 
 
         # Draw bottom quote if present
