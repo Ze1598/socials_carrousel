@@ -41,7 +41,7 @@ class HTMLTextParser(HTMLParser):
             if self.list_stack:
                 current_list = self.list_stack[-1]
                 current_list['count'] += 1
-                prefix = '– ' if current_list['type'] == 'ul' else f"{current_list['count']}. "
+                prefix = '- ' if current_list['type'] == 'ul' else f"{current_list['count']}. "
                 indent = '  ' * (len(self.list_stack) - 1)
                 self.text.append(f"\n{indent}{prefix}")
             
@@ -125,9 +125,9 @@ def parse_markdown(text):
     
     # Process lists
     for i, segment in enumerate(segments):
-        # Process bullet points - using a dash character instead of bullet point for better compatibility
-        segment["text"] = re.sub(r'^\s*-\s+', '– ', segment["text"], flags=re.MULTILINE)
-        segment["text"] = re.sub(r'^\s*\*\s+', '– ', segment["text"], flags=re.MULTILINE)
+        # Process bullet points - using a simple hyphen character for maximum compatibility
+        segment["text"] = re.sub(r'^\s*-\s+', '- ', segment["text"], flags=re.MULTILINE)
+        segment["text"] = re.sub(r'^\s*\*\s+', '- ', segment["text"], flags=re.MULTILINE)
         
         # Process numbered lists
         segment["text"] = re.sub(r'^\s*\d+\.\s+', lambda m: f"{m.group()}", segment["text"], flags=re.MULTILINE)
