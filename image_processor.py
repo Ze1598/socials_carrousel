@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw
 from config import (
     IMAGE_WIDTH, IMAGE_HEIGHT, PADDING, MAX_WIDTH_PX, TEXT_COLOR
 )
-from text_processor import parse_markdown, get_font
+from text_processor import parse_markdown, get_font, replace_special_characters
 
 
 def resize_image_to_square(image, target_size):
@@ -44,6 +44,9 @@ def draw_text_with_wrap(draw, text, position, font, max_width, fill, align="left
     """Draws text on an image with markdown formatting."""
     x, y = position
     font_size = font.size
+    
+    # Ensure special characters are replaced before any processing
+    text = replace_special_characters(text)
     
     # Parse markdown
     text_segments = parse_markdown(text)
@@ -126,6 +129,10 @@ def create_slide(slide_number, heading, content, background_image, fonts):
     # Unpack fonts
     heading_font, content_font = fonts
     
+    # Ensure special characters are replaced before processing
+    processed_heading = replace_special_characters(heading)
+    processed_content = replace_special_characters(content)
+    
     # Calculate the total height of the content to help with vertical centering
     # First, create a temporary drawing context to measure text heights
     temp_img = Image.new("RGBA", (1, 1))
@@ -133,13 +140,13 @@ def create_slide(slide_number, heading, content, background_image, fonts):
     
     # Estimate heading height
     heading_height = 0
-    if heading.strip():
+    if processed_heading.strip():
         # Estimate heading height based on font size and number of lines
-        heading_lines = len(textwrap.wrap(heading, width=50))  # Rough estimate
+        heading_lines = len(textwrap.wrap(processed_heading, width=50))  # Rough estimate
         heading_height = heading_lines * (heading_font.size * 1.35)
     
     # Estimate content height
-    content_lines = len(textwrap.wrap(content, width=80))  # Rough estimate
+    content_lines = len(textwrap.wrap(processed_content, width=80))  # Rough estimate
     content_height = content_lines * (content_font.size * 1.35)
     
     # Add spacing between heading and content if heading exists
@@ -156,8 +163,8 @@ def create_slide(slide_number, heading, content, background_image, fonts):
     heading_y = max(PADDING + 200, vertical_start)  # At least 200px more than standard padding
     
     # Draw heading if it exists
-    if heading.strip():
-        last_y = draw_text_with_wrap(draw, heading, (PADDING, heading_y), 
+    if processed_heading.strip():
+        last_y = draw_text_with_wrap(draw, processed_heading, (PADDING, heading_y), 
                                   heading_font, MAX_WIDTH_PX, TEXT_COLOR)
         # Draw content with spacing below heading
         content_y = last_y + spacing
@@ -166,7 +173,7 @@ def create_slide(slide_number, heading, content, background_image, fonts):
         content_y = heading_y
     
     # Draw content
-    draw_text_with_wrap(draw, content, (PADDING, content_y), 
+    draw_text_with_wrap(draw, processed_content, (PADDING, content_y), 
                       content_font, MAX_WIDTH_PX, TEXT_COLOR)
     
     return slide

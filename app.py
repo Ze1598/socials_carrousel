@@ -17,7 +17,7 @@ from config import (
     TITLE_FONT_SIZE, HEADING_FONT_SIZE, CONTENT_FONT_SIZE,
     PADDING, MAX_WIDTH_PX, TEXT_COLOR, RESOURCES_DIR
 )
-from text_processor import get_font
+from text_processor import get_font, replace_special_characters
 from image_processor import resize_image_to_square, create_slide, draw_text_with_wrap
 from pdf_generator import generate_pdf
 
@@ -133,8 +133,11 @@ def main():
         title_slide = background_image.copy()
         draw = ImageDraw.Draw(title_slide)
         
+        # Ensure special characters are replaced before processing
+        processed_main_title = replace_special_characters(main_title)
+        
         # Estimate title height for better vertical centering
-        title_lines = len(textwrap.wrap(main_title, width=40))  # Rough estimate for title
+        title_lines = len(textwrap.wrap(processed_main_title, width=40))  # Rough estimate for title
         title_height = title_lines * (title_font.size * 1.35)
         
         # Position title more centered vertically (at 40% from top)
@@ -143,7 +146,7 @@ def main():
         # Draw main title on first slide with better wrapping
         # Use a more conservative width estimate for the title font
         title_max_width = MAX_WIDTH_PX - 100  # Extra margin to prevent overflow
-        draw_text_with_wrap(draw, main_title, (PADDING, title_y), 
+        draw_text_with_wrap(draw, processed_main_title, (PADDING, title_y), 
                            title_font, title_max_width, TEXT_COLOR, align="left")
         
         carousel_slides.append(title_slide)

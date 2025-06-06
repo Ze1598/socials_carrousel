@@ -13,10 +13,15 @@ from config import (
 
 # Dictionary of special character replacements for better rendering
 SPECIAL_CHAR_REPLACEMENTS = {
-    '→': '->',  # Replace right arrow with ASCII alternative
-    '←': '<-',  # Replace left arrow with ASCII alternative
-    '↑': '^',   # Replace up arrow
-    '↓': 'v'    # Replace down arrow
+    '→': '->',  # Replace right arrow (U+2192) with ASCII alternative
+    '←': '<-',  # Replace left arrow (U+2190) with ASCII alternative
+    '↑': '^',   # Replace up arrow (U+2191)
+    '↓': 'v',   # Replace down arrow (U+2193)
+    # Add Unicode code point versions to ensure all variants are caught
+    '\u2192': '->',  # Right arrow Unicode escape
+    '\u2190': '<-',  # Left arrow Unicode escape
+    '\u2191': '^',   # Up arrow Unicode escape
+    '\u2193': 'v'    # Down arrow Unicode escape
 }
 
 
