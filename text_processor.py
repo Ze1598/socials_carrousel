@@ -11,6 +11,14 @@ from config import (
     REGULAR_FONT_PATH, BOLD_FONT_PATH, ITALIC_FONT_PATH, BOLD_ITALIC_FONT_PATH
 )
 
+# Dictionary of special character replacements for better rendering
+SPECIAL_CHAR_REPLACEMENTS = {
+    '→': '->',  # Replace right arrow with ASCII alternative
+    '←': '<-',  # Replace left arrow with ASCII alternative
+    '↑': '^',   # Replace up arrow
+    '↓': 'v'    # Replace down arrow
+}
+
 
 class HTMLTextParser(HTMLParser):
     """HTML Parser to convert HTML to formatted text."""
@@ -71,8 +79,17 @@ class HTMLTextParser(HTMLParser):
         return ''.join(self.text)
 
 
+def replace_special_characters(text):
+    """Replace special characters that don't render correctly with alternatives."""
+    for char, replacement in SPECIAL_CHAR_REPLACEMENTS.items():
+        text = text.replace(char, replacement)
+    return text
+
 def parse_markdown(text):
     """Parse markdown text into segments with style information."""
+    # First replace any special characters that don't render well
+    text = replace_special_characters(text)
+    
     segments = []
     
     # Process bold and italic
